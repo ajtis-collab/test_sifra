@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>在线查分系统</title>
+  <style>
+    :root{
+      --bg:#0f172a;        /* 深蓝背景 */
+      --card:#111827;      /* 卡片底色 */
+      --muted:#94a3b8;     /* 次要文字 */
+      --text:#e5e7eb;      /* 主要文字 */
+      --accent:#22d3ee;    /* 高亮色 */
+      --ok:#10b981;        /* 成功 */
+      --warn:#f59e0b;      /* 警告 */
+      --err:#ef4444;       /* 错误 */
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Heiti SC",sans-serif;
+      background:linear-gradient(135deg,#0b1024 0%, #0f172a 60%, #0b1624 100%);
+      color:var(--text); min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .wrap{width:100%; max-width:880px}
+    .card{background:var(--card); border:1px solid #1f2937; border-radius:16px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 6px; font-size:28px; letter-spacing:.3px}
+    .sub{color:var(--muted); margin-bottom:18px; font-size:14px}
+    .search{
+      position:relative; margin-top:8px;
+      display:flex; gap:10px; align-items:center;
+    }
+    .search input{
+      flex:1; padding:14px 16px; border-radius:12px; border:1px solid #223148; background:#0b1222; color:var(--text);
+      outline:none; font-size:16px;
+    }
+    .search input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,211,238,.15)}
+    .search button{
+      padding:12px 18px; border-radius:12px; border:1px solid #1f2e44; background:linear-gradient(180deg,#13324a,#0e2336);
+      color:#d7faff; cursor:pointer; font-weight:600; letter-spacing:.2px;
+    }
+    .search button:hover{filter:brightness(1.06)}
+    .hint{color:var(--muted); font-size:12px; margin-top:8px}
+    .dropdown{
+      position:absolute; top:100%; left:0; right:0; z-index:50;
+      background:#0b1222; border:1px solid #1f2e44; border-radius:12px; margin-top:8px; overflow:hidden; max-height:280px; overflow-y:auto;
+      display:none;
+    }
+    .dropdown.visible{display:block}
+    .opt{padding:10px 14px; cursor:pointer; border-bottom:1px solid #122036}
+    .opt:last-child{border-bottom:none}
+    .opt:hover, .opt.active{background:#0e1a2d}
+    .muted{color:var(--muted); font-size:12px}
+
+    .result{margin-top:18px; display:none}
+    .row{display:flex; gap:14px; flex-wrap:wrap}
+    .pill{background:#0b1222; border:1px solid #1f2e44; border-radius:999px; padding:8px 12px; font-size:13px}
+    .score{
+      margin-top:14px; font-size:42px; font-weight:800; letter-spacing:.5px;
+      background:linear-gradient(90deg,#7dd3fc,#22d3ee 40%,#34d399);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+
+    .loader{display:none; margin-top:18px; align-items:center; gap:12px}
+    .spinner{
+      width:18px; height:18px; border-radius:50%;
+      border:3px solid rgba(34,211,238,.15); border-top-color:var(--accent);
+      animation:spin 1s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .err{color:var(--err); margin-top:10px}
+    .footer{margin-top:22px; color:var(--muted); font-size:12px}
+    .kbd{border:1px solid #324055; border-bottom-width:2px; padding:1px 6px; border-radius:6px; background:#0b1222; color:#cbd5e1}
+    @media (max-width:520px){
+      h1{font-size:24px}
+      .score{font-size:36px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>在线查分系统</h1>
+      <div class="sub">输入或选择姓名（支持中文/法文重音自动匹配），点击“查询分数”。系统将加载 <b>2 秒</b> 后显示结果。</div>
+
+      <div class="search" role="search">
+        <input id="nameInput" type="text" placeholder="例如：Zhang San / José García / 王小明" autocomplete="off" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" />
+        <button id="searchBtn" type="button">查询分数</button>
+        <div id="dropdown" class="dropdown" role="listbox" aria-label="姓名候选列表"></div>
+      </div>
+      <div class="hint">提示：键入 2 个以上字符将出现候选；可用 <span class="kbd">↑</span> <span class="kbd">↓</span> 选择，<span class="kbd">Enter</span> 确认。</div>
+
+      <div id="loader" class="loader" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <div class="muted">正在加载，请稍候…</div>
+      </div>
+
+      <div id="error" class="err" role="alert"></div>
+
+      <div id="result" class="result" aria-live="polite">
+        <div id="who" class="row"></div>
+        <div id="score" class="score"></div>
+        <div id="meta" class="row" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="footer">© 2025 查分系统 · 静态站点（GitHub Pages）</div>
+    </div>
+  </div>
+
+  <!-- 数据文件（在同目录） -->
+  <script src="data.js"></script>
+  <script>
+    // —— 工具：去除重音与全角，统一小写以便无差异匹配 ——
+    const strip = (s) => (s||"")
+      .toString()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')   // 去重音
+      .replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch =>               // 全角转半角
+        String.fromCharCode(ch.charCodeAt(0)-0xFEE0))
+      .toLowerCase().trim();
+
+    // 把数据预处理：生成 displayName 与 searchKey
+    const people = (window.DATA || []).map(x=>{
+      const first = (x.firstName||"").trim();
+      const last  = (x.lastName ||"").trim();
+      const displayName = [first,last].filter(Boolean).join(' ') || x.name || "";
+      const searchKey = strip(displayName);
+      return {...x, displayName, searchKey};
+    });
+
+    // 名字唯一集合（避免重复）
+    const byName = new Map();
+    people.forEach(p=> byName.set(p.displayName, p));
+
+    const $input   = document.getElementById('nameInput');
+    const $drop    = document.getElementById('dropdown');
+    const $btn     = document.getElementById('searchBtn');
+    const $loader  = document.getElementById('loader');
+    const $error   = document.getElementById('error');
+    const $result  = document.getElementById('result');
+    const $who     = document.getElementById('who');
+    const $score   = document.getElementById('score');
+    const $meta    = document.getElementById('meta');
+
+    let activeIndex = -1;
+    let currentList = [];
+
+    function renderDropdown(list){
+      $drop.innerHTML = '';
+      if(!list.length){ $drop.classList.remove('visible'); $input.setAttribute('aria-expanded','false'); return; }
+      list.forEach((p,i)=>{
+        const opt = document.createElement('div');
+        opt.className = 'opt' + (i===activeIndex ? ' active' : '');
+        opt.setAttribute('role','option');
+        opt.setAttribute('tabindex','-1');
+        opt.textContent = p.displayName;
+        opt.addEventListener('mousedown', e => { // 用 mousedown 避免 blur 提前触发
+          e.preventDefault();
+          choose(p.displayName);
+        });
+        $drop.appendChild(opt);
+      });
+      $drop.classList.add('visible');
+      $input.setAttribute('aria-expanded','true');
+    }
+
+    function updateDropdown(){
+      const q = strip($input.value);
+      activeIndex = -1;
+      if(q.length < 2){
+        renderDropdown([]);
+        return;
+      }
+      currentList = people
+        .filter(p => p.searchKey.includes(q))
+        .slice(0, 50); // 最多 50 条
+      renderDropdown(currentList);
+    }
+
+    function choose(name){
+      $input.value = name;
+      $drop.classList.remove('visible');
+      $input.setAttribute('aria-expanded','false');
+      search();
+    }
+
+    function showLoader(on){
+      $loader.style.display = on ? 'flex' : 'none';
+    }
+    function showError(msg){
+      $error.textContent = msg || '';
+    }
+    function showResult(p){
+      if(!p){ $result.style.display='none'; return; }
+      $who.innerHTML = '';
+      const badge = (txt)=>{ const b=document.createElement('div'); b.className='pill'; b.textContent=txt; return b; };
+
+      $who.appendChild(badge(p.displayName));
+      if(p.age!==undefined) $who.appendChild(badge(`年龄 ${p.age}`));
+
+      $score.textContent = (p.score!==undefined && p.score!==null) ? `分数：${p.score}` : '未找到分数';
+      $meta.innerHTML = '';
+      if(p.project) $meta.appendChild(badge(`项目：${p.project}`));
+      if(p.track)   $meta.appendChild(badge(`Track：${p.track}`));
+      $result.style.display='block';
+    }
+
+    function search(){
+      showError('');
+      showResult(null);
+      const name = $input.value.trim();
+      if(!name){ showError('请先选择或输入姓名'); return; }
+
+      // 精确命中优先；否则尝试无重音模糊匹配的首个结果
+      let person = byName.get(name);
+      if(!person){
+        const key = strip(name);
+        person = people.find(p => p.searchKey === key) || people.find(p => p.searchKey.includes(key));
+      }
+      if(!person){ showError('未找到该姓名，请从下拉候选中选择（避免中英文/重音差异）'); return; }
+
+      // 2 秒加载动画
+      showLoader(true);
+      $btn.disabled = true;
+      $input.disabled = true;
+      setTimeout(()=>{
+        showLoader(false);
+        showResult(person);
+        $btn.disabled = false;
+        $input.disabled = false;
+        $input.focus();
+      }, 2000);
+    }
+
+    // 事件绑定
+    $input.addEventListener('input', updateDropdown);
+    $input.addEventListener('focus', updateDropdown);
+    $input.addEventListener('blur', ()=>setTimeout(()=>{$drop.classList.remove('visible'); $input.setAttribute('aria-expanded','false');},150));
+
+    // 键盘导航
+    $input.addEventListener('keydown', (e)=>{
+      const visible = $drop.classList.contains('visible');
+      if(visible && (e.key==='ArrowDown' || e.key==='ArrowUp')){
+        e.preventDefault();
+        const max = currentList.length-1;
+        if(max<0) return;
+        if(e.key==='ArrowDown') activeIndex = Math.min(max, activeIndex+1);
+        else activeIndex = Math.max(0, activeIndex-1);
+        Array.from($drop.children).forEach((el,i)=> el.classList.toggle('active', i===activeIndex));
+      }else if(e.key==='Enter'){
+        e.preventDefault();
+        if(visible && activeIndex>=0 && currentList[activeIndex]){
+          choose(currentList[activeIndex].displayName);
+        }else{
+          search();
+        }
+      }else if(e.key==='Escape'){
+        $drop.classList.remove('visible');
+        $input.setAttribute('aria-expanded','false');
+      }
+    });
+    $btn.addEventListener('click', search);
+  </script>
+</body>
+</html>
