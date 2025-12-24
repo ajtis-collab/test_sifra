@@ -1,263 +1,448 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>在线查分系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>你的名字 | CV</title>
+  <meta name="description" content="你的名字的个人简历（CV）" />
+
   <style>
     :root{
-      --bg:#0f172a;        /* 深蓝背景 */
-      --card:#111827;      /* 卡片底色 */
-      --muted:#94a3b8;     /* 次要文字 */
-      --text:#e5e7eb;      /* 主要文字 */
-      --accent:#22d3ee;    /* 高亮色 */
-      --ok:#10b981;        /* 成功 */
-      --warn:#f59e0b;      /* 警告 */
-      --err:#ef4444;       /* 错误 */
+      --bg: #0b1220;
+      --card: rgba(255,255,255,.06);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --line: rgba(255,255,255,.12);
+      --accent: #7dd3fc; /* 你可以换颜色 */
+      --tag: rgba(125, 211, 252, .16);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --max: 980px;
     }
+
     *{box-sizing:border-box}
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans", "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Heiti SC",sans-serif;
-      background:linear-gradient(135deg,#0b1024 0%, #0f172a 60%, #0b1624 100%);
-      color:var(--text); min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:24px;
-    }
-    .wrap{width:100%; max-width:880px}
-    .card{background:var(--card); border:1px solid #1f2937; border-radius:16px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    h1{margin:0 0 6px; font-size:28px; letter-spacing:.3px}
-    .sub{color:var(--muted); margin-bottom:18px; font-size:14px}
-    .search{
-      position:relative; margin-top:8px;
-      display:flex; gap:10px; align-items:center;
-    }
-    .search input{
-      flex:1; padding:14px 16px; border-radius:12px; border:1px solid #223148; background:#0b1222; color:var(--text);
-      outline:none; font-size:16px;
-    }
-    .search input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,211,238,.15)}
-    .search button{
-      padding:12px 18px; border-radius:12px; border:1px solid #1f2e44; background:linear-gradient(180deg,#13324a,#0e2336);
-      color:#d7faff; cursor:pointer; font-weight:600; letter-spacing:.2px;
-    }
-    .search button:hover{filter:brightness(1.06)}
-    .hint{color:var(--muted); font-size:12px; margin-top:8px}
-    .dropdown{
-      position:absolute; top:100%; left:0; right:0; z-index:50;
-      background:#0b1222; border:1px solid #1f2e44; border-radius:12px; margin-top:8px; overflow:hidden; max-height:280px; overflow-y:auto;
-      display:none;
-    }
-    .dropdown.visible{display:block}
-    .opt{padding:10px 14px; cursor:pointer; border-bottom:1px solid #122036}
-    .opt:last-child{border-bottom:none}
-    .opt:hover, .opt.active{background:#0e1a2d}
-    .muted{color:var(--muted); font-size:12px}
-
-    .result{margin-top:18px; display:none}
-    .row{display:flex; gap:14px; flex-wrap:wrap}
-    .pill{background:#0b1222; border:1px solid #1f2e44; border-radius:999px; padding:8px 12px; font-size:13px}
-    .score{
-      margin-top:14px; font-size:42px; font-weight:800; letter-spacing:.5px;
-      background:linear-gradient(90deg,#7dd3fc,#22d3ee 40%,#34d399);
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(125,211,252,.18), transparent 60%),
+        radial-gradient(1000px 700px at 90% 20%, rgba(167,139,250,.16), transparent 55%),
+        radial-gradient(900px 600px at 50% 90%, rgba(34,197,94,.10), transparent 60%),
+        var(--bg);
+      line-height:1.55;
     }
 
-    .loader{display:none; margin-top:18px; align-items:center; gap:12px}
-    .spinner{
-      width:18px; height:18px; border-radius:50%;
-      border:3px solid rgba(34,211,238,.15); border-top-color:var(--accent);
-      animation:spin 1s linear infinite;
+    a{color:var(--text); text-decoration:none}
+    a:hover{color:var(--accent)}
+    .wrap{
+      max-width:var(--max);
+      margin:40px auto;
+      padding:0 18px 60px;
     }
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .err{color:var(--err); margin-top:10px}
-    .footer{margin-top:22px; color:var(--muted); font-size:12px}
-    .kbd{border:1px solid #324055; border-bottom-width:2px; padding:1px 6px; border-radius:6px; background:#0b1222; color:#cbd5e1}
-    @media (max-width:520px){
-      h1{font-size:24px}
-      .score{font-size:36px}
+
+    .topbar{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      backdrop-filter: blur(10px);
+    }
+    .pill small{color:var(--muted)}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.25)}
+    .btn:active{transform: translateY(1px)}
+    @media print{
+      .topbar{display:none}
+      body{background:white; color:#111}
+      a{color:#111}
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap:18px;
+      margin-top:16px;
+    }
+    @media (max-width: 860px){
+      .hero{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(14px);
+    }
+
+    .name{
+      font-size:34px;
+      letter-spacing:.2px;
+      margin:0 0 6px;
+    }
+    .title{
+      color:var(--muted);
+      margin:0 0 14px;
+      font-size:15.5px;
+    }
+    .summary{
+      margin:0;
+      color:rgba(255,255,255,.86);
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    .meta a, .meta span{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:rgba(255,255,255,.86);
+      font-size:14px;
+    }
+    .meta .muted{color:var(--muted)}
+
+    h2{
+      margin:0 0 12px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .section{
+      margin-top:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    .item{
+      padding:14px 0;
+      border-top:1px solid var(--line);
+    }
+    .item:first-child{border-top:0; padding-top:0}
+    .row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .where{
+      font-weight:600;
+      margin:0;
+    }
+    .when{
+      color:var(--muted);
+      font-size:13px;
+      white-space:nowrap;
+      margin-top:2px;
+    }
+    .role{
+      margin:3px 0 8px;
+      color:rgba(255,255,255,.85);
+    }
+    ul{
+      margin:0;
+      padding-left:18px;
+      color:rgba(255,255,255,.82);
+    }
+    li{margin:6px 0}
+
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .tag{
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--tag);
+      border:1px solid rgba(125,211,252,.22);
+      color:rgba(255,255,255,.88);
+      font-size:13px;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 520px){
+      .split{grid-template-columns:1fr}
+    }
+
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background: rgba(255,255,255,.03);
+    }
+    .kpi strong{display:block; font-size:15px}
+    .kpi span{color:var(--muted); font-size:13px}
+
+    .footer{
+      color:var(--muted);
+      text-align:center;
+      margin-top:22px;
+      font-size:13px;
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>在线查分系统</h1>
-      <div class="sub">输入或选择姓名（支持中文/法文重音自动匹配），点击“查询分数”。系统将加载 <b>2 秒</b> 后显示结果。</div>
-
-      <div class="search" role="search">
-        <input id="nameInput" type="text" placeholder="例如：Zhang San / José García / 王小明" autocomplete="off" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" />
-        <button id="searchBtn" type="button">查询分数</button>
-        <div id="dropdown" class="dropdown" role="listbox" aria-label="姓名候选列表"></div>
+    <div class="topbar">
+      <div class="pill">
+        <span>📄</span>
+        <small>在线简历 / CV</small>
       </div>
-      <div class="hint">提示：键入 2 个以上字符将出现候选；可用 <span class="kbd">↑</span> <span class="kbd">↓</span> 选择，<span class="kbd">Enter</span> 确认。</div>
+      <button class="btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
+    </div>
 
-      <div id="loader" class="loader" aria-live="polite">
-        <div class="spinner" aria-hidden="true"></div>
-        <div class="muted">正在加载，请稍候…</div>
-      </div>
+    <div class="hero">
+      <!-- 左：简介 -->
+      <section class="card">
+        <h1 class="name">你的名字</h1>
+        <p class="title">职位头衔（例如：Battery & AI | Founder / PhD） · 城市（例如：Paris, France）</p>
 
-      <div id="error" class="err" role="alert"></div>
+        <p class="summary">
+          一句话定位：你擅长什么 + 解决什么问题 + 你的亮点（例如：专注电池健康诊断与储能系统，擅长把算法落地成可交付产品）。
+        </p>
 
-      <div id="result" class="result" aria-live="polite">
-        <div id="who" class="row"></div>
-        <div id="score" class="score"></div>
-        <div id="meta" class="row" style="margin-top:10px;"></div>
-      </div>
+        <div class="meta">
+          <a href="mailto:you@example.com">✉️ you@example.com</a>
+          <a href="tel:+33600000000">📞 +33 6 00 00 00 00</a>
+          <a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noreferrer">in LinkedIn</a>
+          <a href="https://github.com/yourname" target="_blank" rel="noreferrer">⌂ GitHub</a>
+          <span class="muted">🌐 yoursite.com</span>
+        </div>
 
-      <div class="footer">© 2025 查分系统 · 静态站点（GitHub Pages）</div>
+        <div class="section">
+          <h2>核心能力</h2>
+          <div class="tags">
+            <span class="tag">技能 1（例如：Battery diagnostics）</span>
+            <span class="tag">技能 2（例如：Time-series / ML）</span>
+            <span class="tag">技能 3（例如：BESS / EMS）</span>
+            <span class="tag">技能 4（例如：Product & BD）</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右：重点信息 -->
+      <aside class="card">
+        <h2>亮点概览</h2>
+        <div class="split">
+          <div class="kpi">
+            <strong>成果 A</strong>
+            <span>例如：0→1 做出 MVP / 原型</span>
+          </div>
+          <div class="kpi">
+            <strong>成果 B</strong>
+            <span>例如：论文 / 专利 / 竞赛 / 项目</span>
+          </div>
+          <div class="kpi">
+            <strong>成果 C</strong>
+            <span>例如：合作伙伴 / 客户 / 生态资源</span>
+          </div>
+          <div class="kpi">
+            <strong>成果 D</strong>
+            <span>例如：融资 / grant / 关键指标</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>求职意向（可选）</h2>
+          <p class="summary">
+            例如：Battery data scientist / Energy storage PM / Startup co-founder（远程或巴黎）。
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="grid">
+      <!-- 经历 -->
+      <section class="card">
+        <h2>工作 / 创业经历</h2>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">公司 / 组织名称（例如：Sifra Energy）</p>
+            <div class="when">2024 — 至今</div>
+          </div>
+          <div class="role">职位（例如：Founder & CEO）</div>
+          <ul>
+            <li>用动作动词写：负责……，实现……，产生……影响。</li>
+            <li>写数字：例如“将检测时间从 X 降到 Y”，“成本降低 Z%”。</li>
+            <li>写协作：例如“与 XX 合作完成 XX”。</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">关键词 1</span><span class="tag">关键词 2</span><span class="tag">关键词 3</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">公司 / 组织名称</p>
+            <div class="when">2022 — 2024</div>
+          </div>
+          <div class="role">职位</div>
+          <ul>
+            <li>用 STAR：背景/任务/行动/结果（简短）。</li>
+            <li>突出你的贡献，而不是团队做了什么。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 教育 -->
+      <section class="card">
+        <h2>教育背景</h2>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">学校名称（例如：Université Paris-Saclay）</p>
+            <div class="when">2022 — 2026</div>
+          </div>
+          <div class="role">学位 / 专业（例如：PhD · Battery / Control / ML）</div>
+          <ul>
+            <li>研究方向：……（例如：PMP + RL 健康感知充电策略）</li>
+            <li>关键课程 / 项目：……</li>
+          </ul>
+        </div>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">学校名称</p>
+            <div class="when">2018 — 2022</div>
+          </div>
+          <div class="role">学位 / 专业</div>
+          <ul>
+            <li>亮点：GPA / 奖学金 / 交换 / 项目</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>项目（可选）</h2>
+          <div class="item">
+            <div class="row">
+              <p class="where">项目名称（链接可选）</p>
+              <div class="when">2025</div>
+            </div>
+            <div class="role">一句话说明项目价值</div>
+            <ul>
+              <li>技术栈：Python / MATLAB / Simulink / Docker …</li>
+              <li>结果：指标 / demo / 用户反馈</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid">
+      <!-- 论文/专利 -->
+      <section class="card">
+        <h2>论文 / 专利 / 公开演讲（可选）</h2>
+        <div class="item">
+          <div class="row">
+            <p class="where">论文标题 / 专利标题</p>
+            <div class="when">2025</div>
+          </div>
+          <div class="role">期刊/会议 · 作者顺序（例如：First author）</div>
+          <ul>
+            <li>一句话说明贡献点（例如：提出 XX 方法，达到 XX 性能）。</li>
+          </ul>
+        </div>
+        <div class="item">
+          <div class="row">
+            <p class="where">Talk / Workshop / Demo</p>
+            <div class="when">2024</div>
+          </div>
+          <div class="role">活动名 · 主题</div>
+        </div>
+      </section>
+
+      <!-- 技能 -->
+      <section class="card">
+        <h2>技能</h2>
+        <div class="item">
+          <div class="row">
+            <p class="where">技术</p>
+          </div>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">MATLAB/Simulink</span>
+            <span class="tag">机器学习</span>
+            <span class="tag">数据分析</span>
+            <span class="tag">嵌入式/硬件（可选）</span>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">语言</p>
+          </div>
+          <ul>
+            <li>中文：母语</li>
+            <li>英语：流利</li>
+            <li>法语：工作沟通（按你实际情况改）</li>
+          </ul>
+        </div>
+
+        <div class="item">
+          <div class="row">
+            <p class="where">兴趣（可选）</p>
+          </div>
+          <div class="tags">
+            <span class="tag">摄影</span>
+            <span class="tag">徒步</span>
+            <span class="tag">开源</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      © <span id="y"></span> 你的名字 · Built with pure HTML/CSS · Hosted on GitHub Pages
     </div>
   </div>
 
-  <!-- 数据文件（在同目录） -->
-  <script src="data.js"></script>
   <script>
-    // —— 工具：去除重音与全角，统一小写以便无差异匹配 ——
-    const strip = (s) => (s||"")
-      .toString()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')   // 去重音
-      .replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch =>               // 全角转半角
-        String.fromCharCode(ch.charCodeAt(0)-0xFEE0))
-      .toLowerCase().trim();
-
-    // 把数据预处理：生成 displayName 与 searchKey
-    const people = (window.DATA || []).map(x=>{
-      const first = (x.firstName||"").trim();
-      const last  = (x.lastName ||"").trim();
-      const displayName = [first,last].filter(Boolean).join(' ') || x.name || "";
-      const searchKey = strip(displayName);
-      return {...x, displayName, searchKey};
-    });
-
-    // 名字唯一集合（避免重复）
-    const byName = new Map();
-    people.forEach(p=> byName.set(p.displayName, p));
-
-    const $input   = document.getElementById('nameInput');
-    const $drop    = document.getElementById('dropdown');
-    const $btn     = document.getElementById('searchBtn');
-    const $loader  = document.getElementById('loader');
-    const $error   = document.getElementById('error');
-    const $result  = document.getElementById('result');
-    const $who     = document.getElementById('who');
-    const $score   = document.getElementById('score');
-    const $meta    = document.getElementById('meta');
-
-    let activeIndex = -1;
-    let currentList = [];
-
-    function renderDropdown(list){
-      $drop.innerHTML = '';
-      if(!list.length){ $drop.classList.remove('visible'); $input.setAttribute('aria-expanded','false'); return; }
-      list.forEach((p,i)=>{
-        const opt = document.createElement('div');
-        opt.className = 'opt' + (i===activeIndex ? ' active' : '');
-        opt.setAttribute('role','option');
-        opt.setAttribute('tabindex','-1');
-        opt.textContent = p.displayName;
-        opt.addEventListener('mousedown', e => { // 用 mousedown 避免 blur 提前触发
-          e.preventDefault();
-          choose(p.displayName);
-        });
-        $drop.appendChild(opt);
-      });
-      $drop.classList.add('visible');
-      $input.setAttribute('aria-expanded','true');
-    }
-
-    function updateDropdown(){
-      const q = strip($input.value);
-      activeIndex = -1;
-      if(q.length < 2){
-        renderDropdown([]);
-        return;
-      }
-      currentList = people
-        .filter(p => p.searchKey.includes(q))
-        .slice(0, 50); // 最多 50 条
-      renderDropdown(currentList);
-    }
-
-    function choose(name){
-      $input.value = name;
-      $drop.classList.remove('visible');
-      $input.setAttribute('aria-expanded','false');
-      search();
-    }
-
-    function showLoader(on){
-      $loader.style.display = on ? 'flex' : 'none';
-    }
-    function showError(msg){
-      $error.textContent = msg || '';
-    }
-    function showResult(p){
-      if(!p){ $result.style.display='none'; return; }
-      $who.innerHTML = '';
-      const badge = (txt)=>{ const b=document.createElement('div'); b.className='pill'; b.textContent=txt; return b; };
-
-      $who.appendChild(badge(p.displayName));
-      if(p.age!==undefined) $who.appendChild(badge(`年龄 ${p.age}`));
-
-      $score.textContent = (p.score!==undefined && p.score!==null) ? `分数：${p.score}` : '未找到分数';
-      $meta.innerHTML = '';
-      if(p.project) $meta.appendChild(badge(`项目：${p.project}`));
-      if(p.track)   $meta.appendChild(badge(`Track：${p.track}`));
-      $result.style.display='block';
-    }
-
-    function search(){
-      showError('');
-      showResult(null);
-      const name = $input.value.trim();
-      if(!name){ showError('请先选择或输入姓名'); return; }
-
-      // 精确命中优先；否则尝试无重音模糊匹配的首个结果
-      let person = byName.get(name);
-      if(!person){
-        const key = strip(name);
-        person = people.find(p => p.searchKey === key) || people.find(p => p.searchKey.includes(key));
-      }
-      if(!person){ showError('未找到该姓名，请从下拉候选中选择（避免中英文/重音差异）'); return; }
-
-      // 2 秒加载动画
-      showLoader(true);
-      $btn.disabled = true;
-      $input.disabled = true;
-      setTimeout(()=>{
-        showLoader(false);
-        showResult(person);
-        $btn.disabled = false;
-        $input.disabled = false;
-        $input.focus();
-      }, 2000);
-    }
-
-    // 事件绑定
-    $input.addEventListener('input', updateDropdown);
-    $input.addEventListener('focus', updateDropdown);
-    $input.addEventListener('blur', ()=>setTimeout(()=>{$drop.classList.remove('visible'); $input.setAttribute('aria-expanded','false');},150));
-
-    // 键盘导航
-    $input.addEventListener('keydown', (e)=>{
-      const visible = $drop.classList.contains('visible');
-      if(visible && (e.key==='ArrowDown' || e.key==='ArrowUp')){
-        e.preventDefault();
-        const max = currentList.length-1;
-        if(max<0) return;
-        if(e.key==='ArrowDown') activeIndex = Math.min(max, activeIndex+1);
-        else activeIndex = Math.max(0, activeIndex-1);
-        Array.from($drop.children).forEach((el,i)=> el.classList.toggle('active', i===activeIndex));
-      }else if(e.key==='Enter'){
-        e.preventDefault();
-        if(visible && activeIndex>=0 && currentList[activeIndex]){
-          choose(currentList[activeIndex].displayName);
-        }else{
-          search();
-        }
-      }else if(e.key==='Escape'){
-        $drop.classList.remove('visible');
-        $input.setAttribute('aria-expanded','false');
-      }
-    });
-    $btn.addEventListener('click', search);
+    document.getElementById("y").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
