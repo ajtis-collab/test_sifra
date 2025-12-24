@@ -3,446 +3,554 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>你的名字 | CV</title>
-  <meta name="description" content="你的名字的个人简历（CV）" />
-
+  <title>企业新闻 | Sifra Tech Newsroom</title>
   <style>
     :root{
-      --bg: #0b1220;
-      --card: rgba(255,255,255,.06);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --line: rgba(255,255,255,.12);
-      --accent: #7dd3fc; /* 你可以换颜色 */
-      --tag: rgba(125, 211, 252, .16);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 16px;
-      --max: 980px;
+      --bg:#f6f7f9;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e5e7eb;
+      --nav:#0b1324;
+      --nav2:#0f1a33;
+      --accent:#2563eb;
+      --accent2:#ef4444;
     }
-
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC","Noto Sans CJK SC","Microsoft YaHei", sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(1200px 800px at 20% 10%, rgba(125,211,252,.18), transparent 60%),
-        radial-gradient(1000px 700px at 90% 20%, rgba(167,139,250,.16), transparent 55%),
-        radial-gradient(900px 600px at 50% 90%, rgba(34,197,94,.10), transparent 60%),
-        var(--bg);
-      line-height:1.55;
+      background:var(--bg);
+      line-height:1.65;
     }
-
-    a{color:var(--text); text-decoration:none}
+    a{color:inherit; text-decoration:none}
     a:hover{color:var(--accent)}
-    .wrap{
-      max-width:var(--max);
-      margin:40px auto;
-      padding:0 18px 60px;
+    .topbar{
+      background:var(--nav);
+      color:#fff;
+      height:52px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 18px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar .left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:14px;
+      opacity:.95;
+    }
+    .badge-date{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .brand .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:linear-gradient(135deg,#60a5fa,#22c55e);
+      box-shadow:0 0 0 4px rgba(96,165,250,.15);
+    }
+    .topbar .right a{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      font-size:14px;
     }
 
-    .topbar{
+    .nav{
+      background:var(--nav2);
+      color:#e5e7eb;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav .wrap{
+      max-width:1160px;
+      margin:0 auto;
+      padding:10px 16px;
       display:flex;
       gap:14px;
       align-items:center;
-      justify-content:space-between;
-      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .nav a{
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:600;
+      font-size:14px;
+      color:#e5e7eb;
+      opacity:.92;
+    }
+    .nav a:hover{
+      background:rgba(255,255,255,.08);
+      opacity:1;
+    }
+    .nav .active{
+      background:rgba(37,99,235,.25);
+      border:1px solid rgba(37,99,235,.35);
     }
 
+    .container{
+      max-width:1160px;
+      margin:24px auto 40px;
+      padding:0 16px;
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      .container{grid-template-columns:1fr}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:0 8px 24px rgba(15,23,42,.06);
+      overflow:hidden;
+    }
+    .card .inner{padding:22px}
+    .title{
+      font-size:26px;
+      line-height:1.25;
+      margin:0 0 10px;
+      letter-spacing:.2px;
+    }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:16px;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line);
+    }
+    .meta span{display:inline-flex;align-items:center;gap:8px}
     .pill{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:10px 12px;
-      border:1px solid var(--line);
+      padding:4px 10px;
       border-radius:999px;
-      background:rgba(255,255,255,.03);
-      backdrop-filter: blur(10px);
+      background:#f1f5f9;
+      border:1px solid #e2e8f0;
+      color:#334155;
+      font-weight:600;
+      font-size:12px;
     }
-    .pill small{color:var(--muted)}
+
+    .hero-img{
+      width:100%;
+      height:380px;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid var(--line);
+      margin:14px 0 14px;
+      background:#e2e8f0;
+    }
+    .article p{margin:12px 0}
+    .quote{
+      margin:14px 0;
+      padding:14px 16px;
+      background:#eff6ff;
+      border:1px solid #dbeafe;
+      border-left:4px solid var(--accent);
+      border-radius:12px;
+      color:#1e3a8a;
+      font-weight:600;
+    }
+
+    /* Media logos area */
+    .media-strip{
+      margin-top:18px;
+      padding:18px;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    }
+    .media-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .media-title h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .media-title .hint{
+      color:var(--muted);
+      font-size:13px;
+    }
+    .logos{
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 980px){
+      .logos{grid-template-columns: repeat(3, 1fr);}
+    }
+    .logo{
+      height:56px;
+      border-radius:14px;
+      border:1px dashed #cbd5e1;
+      background:#f8fafc;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      letter-spacing:.8px;
+      color:#334155;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .logo::after{
+      content:"";
+      position:absolute;
+      inset:-40% -40%;
+      background:linear-gradient(120deg, rgba(37,99,235,.12), rgba(34,197,94,.10), rgba(239,68,68,.08));
+      transform:rotate(10deg);
+      filter:blur(8px);
+      opacity:.55;
+    }
+    .logo span{position:relative; z-index:1}
+    .logo small{
+      position:relative; z-index:1;
+      font-weight:700;
+      font-size:12px;
+      color:#475569;
+    }
+
+    /* Sidebar */
+    .side .block{margin-bottom:14px}
+    .side h4{
+      margin:0 0 10px;
+      font-size:15px;
+      letter-spacing:.2px;
+    }
+    .searchbar{
+      display:flex;
+      gap:8px;
+    }
+    .searchbar input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      outline:none;
+      font-size:14px;
+      background:#fff;
+    }
+    .searchbar button{
+      padding:12px 14px;
+      border:none;
+      border-radius:12px;
+      background:var(--accent2);
+      color:#fff;
+      font-weight:800;
+      cursor:pointer;
+      letter-spacing:.3px;
+    }
+    .notice{
+      color:var(--muted);
+      font-size:13px;
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:14px;
+      padding:12px;
+    }
+    .latest{
+      border-top:3px solid var(--accent);
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+    .latest .head{
+      padding:12px 14px;
+      background:#f8fafc;
+      font-weight:900;
+      letter-spacing:.2px;
+      border-bottom:1px solid var(--line);
+    }
+    .latest ul{
+      list-style:none;
+      margin:0;
+      padding:8px 14px 12px;
+    }
+    .latest li{
+      padding:10px 0;
+      border-bottom:1px dashed #e2e8f0;
+      color:#0f172a;
+      font-size:14px;
+    }
+    .latest li:last-child{border-bottom:none}
+    .latest a{color:#0f172a}
+    .latest a:hover{color:var(--accent)}
+
+    /* Footer */
+    .footer{
+      background:var(--nav);
+      color:#cbd5e1;
+      margin-top:44px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .footer .wrap{
+      max-width:1160px;
+      margin:0 auto;
+      padding:28px 16px;
+      display:grid;
+      grid-template-columns: 2fr 1fr;
+      gap:18px;
+    }
+    @media (max-width: 980px){
+      .footer .wrap{grid-template-columns:1fr}
+    }
+    .footer h5{
+      margin:0 0 12px;
+      color:#fff;
+      font-size:16px;
+      letter-spacing:.3px;
+    }
+    .footer .links{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:8px 14px;
+      font-size:13px;
+      opacity:.92;
+    }
+    @media (max-width: 980px){
+      .footer .links{grid-template-columns: repeat(2, 1fr)}
+    }
+    .footer .links a{
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+    }
+    .footer .contact{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      font-size:13px;
+      opacity:.92;
+    }
+    .copyright{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:14px 16px;
+      text-align:center;
+      font-size:12px;
+      color:#94a3b8;
+    }
+    .btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
     .btn{
       display:inline-flex;
       align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
+      justify-content:center;
+      padding:10px 12px;
+      border-radius:12px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
+      background:#fff;
+      font-weight:800;
+      font-size:13px;
       cursor:pointer;
     }
-    .btn:hover{border-color:rgba(255,255,255,.25)}
-    .btn:active{transform: translateY(1px)}
-    @media print{
-      .topbar{display:none}
-      body{background:white; color:#111}
-      a{color:#111}
-    }
-
-    .hero{
-      display:grid;
-      grid-template-columns: 1.4fr .9fr;
-      gap:18px;
-      margin-top:16px;
-    }
-    @media (max-width: 860px){
-      .hero{grid-template-columns:1fr}
-    }
-
-    .card{
-      border:1px solid var(--line);
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      padding:22px;
-      backdrop-filter: blur(14px);
-    }
-
-    .name{
-      font-size:34px;
-      letter-spacing:.2px;
-      margin:0 0 6px;
-    }
-    .title{
-      color:var(--muted);
-      margin:0 0 14px;
-      font-size:15.5px;
-    }
-    .summary{
-      margin:0;
-      color:rgba(255,255,255,.86);
-    }
-
-    .meta{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:16px;
-    }
-    .meta a, .meta span{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      color:rgba(255,255,255,.86);
-      font-size:14px;
-    }
-    .meta .muted{color:var(--muted)}
-
-    h2{
-      margin:0 0 12px;
-      font-size:18px;
-      letter-spacing:.2px;
-    }
-    .section{
-      margin-top:18px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:18px;
-      margin-top:18px;
-    }
-    @media (max-width: 860px){
-      .grid{grid-template-columns:1fr}
-    }
-
-    .item{
-      padding:14px 0;
-      border-top:1px solid var(--line);
-    }
-    .item:first-child{border-top:0; padding-top:0}
-    .row{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .where{
-      font-weight:600;
-      margin:0;
-    }
-    .when{
-      color:var(--muted);
-      font-size:13px;
-      white-space:nowrap;
-      margin-top:2px;
-    }
-    .role{
-      margin:3px 0 8px;
-      color:rgba(255,255,255,.85);
-    }
-    ul{
-      margin:0;
-      padding-left:18px;
-      color:rgba(255,255,255,.82);
-    }
-    li{margin:6px 0}
-
-    .tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-    .tag{
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--tag);
-      border:1px solid rgba(125,211,252,.22);
-      color:rgba(255,255,255,.88);
-      font-size:13px;
-    }
-
-    .split{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    @media (max-width: 520px){
-      .split{grid-template-columns:1fr}
-    }
-
-    .kpi{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:14px;
-      background: rgba(255,255,255,.03);
-    }
-    .kpi strong{display:block; font-size:15px}
-    .kpi span{color:var(--muted); font-size:13px}
-
-    .footer{
-      color:var(--muted);
-      text-align:center;
-      margin-top:22px;
-      font-size:13px;
+    .btn.primary{
+      border-color:rgba(37,99,235,.35);
+      background:rgba(37,99,235,.08);
+      color:#1d4ed8;
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="pill">
-        <span>📄</span>
-        <small>在线简历 / CV</small>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="left">
+      <span class="badge-date">🗓️ 2025-12-24</span>
+      <div class="brand">
+        <span class="dot"></span>
+        <span>Sifra Tech · Newsroom</span>
       </div>
-      <button class="btn" onclick="window.print()">🖨️ 打印 / 导出 PDF</button>
     </div>
+    <div class="right">
+      <a href="#" aria-label="Contact Us">Contact Us</a>
+    </div>
+  </header>
 
-    <div class="hero">
-      <!-- 左：简介 -->
-      <section class="card">
-        <h1 class="name">你的名字</h1>
-        <p class="title">职位头衔（例如：Battery & AI | Founder / PhD） · 城市（例如：Paris, France）</p>
+  <!-- Nav -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="wrap">
+      <a class="active" href="#">Home</a>
+      <a href="#">Company</a>
+      <a href="#">Business Finance</a>
+      <a href="#">Technology</a>
+      <a href="#">Smart Energy</a>
+      <a href="#">Events</a>
+      <a href="#">More ▾</a>
+    </div>
+  </nav>
 
-        <p class="summary">
-          一句话定位：你擅长什么 + 解决什么问题 + 你的亮点（例如：专注电池健康诊断与储能系统，擅长把算法落地成可交付产品）。
-        </p>
+  <!-- Main -->
+  <main class="container">
+    <!-- Article -->
+    <section class="card">
+      <div class="inner">
+        <h1 class="title">Sifra Energy 发布第二生命电池 BESS 原型：面向欧洲工商业储能的快速部署方案</h1>
 
         <div class="meta">
-          <a href="mailto:you@example.com">✉️ you@example.com</a>
-          <a href="tel:+33600000000">📞 +33 6 00 00 00 00</a>
-          <a href="https://www.linkedin.com/in/yourname" target="_blank" rel="noreferrer">in LinkedIn</a>
-          <a href="https://github.com/yourname" target="_blank" rel="noreferrer">⌂ GitHub</a>
-          <span class="muted">🌐 yoursite.com</span>
+          <span>🕒 2025-12-24</span>
+          <span>✍️ Sifra Tech Press</span>
+          <span class="pill">企业新闻</span>
+          <span class="pill">BESS</span>
+          <span class="pill">Second-life Batteries</span>
         </div>
 
-        <div class="section">
-          <h2>核心能力</h2>
-          <div class="tags">
-            <span class="tag">技能 1（例如：Battery diagnostics）</span>
-            <span class="tag">技能 2（例如：Time-series / ML）</span>
-            <span class="tag">技能 3（例如：BESS / EMS）</span>
-            <span class="tag">技能 4（例如：Product & BD）</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- 右：重点信息 -->
-      <aside class="card">
-        <h2>亮点概览</h2>
-        <div class="split">
-          <div class="kpi">
-            <strong>成果 A</strong>
-            <span>例如：0→1 做出 MVP / 原型</span>
-          </div>
-          <div class="kpi">
-            <strong>成果 B</strong>
-            <span>例如：论文 / 专利 / 竞赛 / 项目</span>
-          </div>
-          <div class="kpi">
-            <strong>成果 C</strong>
-            <span>例如：合作伙伴 / 客户 / 生态资源</span>
-          </div>
-          <div class="kpi">
-            <strong>成果 D</strong>
-            <span>例如：融资 / grant / 关键指标</span>
-          </div>
-        </div>
-
-        <div class="section">
-          <h2>求职意向（可选）</h2>
-          <p class="summary">
-            例如：Battery data scientist / Energy storage PM / Startup co-founder（远程或巴黎）。
+        <article class="article">
+          <p>
+            近日，Sifra Energy 正式发布基于退役动力电池整包复用的 BESS 原型方案。该方案通过复用原车 BMS 与热管理系统，
+            在保障安全性的同时降低系统集成成本，适用于工商业侧削峰填谷、微电网与应急备电等场景。
           </p>
-        </div>
-      </aside>
-    </div>
 
-    <div class="grid">
-      <!-- 经历 -->
-      <section class="card">
-        <h2>工作 / 创业经历</h2>
-
-        <div class="item">
-          <div class="row">
-            <p class="where">公司 / 组织名称（例如：Sifra Energy）</p>
-            <div class="when">2024 — 至今</div>
+          <div class="quote">
+            亮点：快速接入 · 安全可控 · 成本友好 · 便于运维（链接均为占位）
           </div>
-          <div class="role">职位（例如：Founder & CEO）</div>
-          <ul>
-            <li>用动作动词写：负责……，实现……，产生……影响。</li>
-            <li>写数字：例如“将检测时间从 X 降到 Y”，“成本降低 Z%”。</li>
-            <li>写协作：例如“与 XX 合作完成 XX”。</li>
-          </ul>
-          <div class="tags">
-            <span class="tag">关键词 1</span><span class="tag">关键词 2</span><span class="tag">关键词 3</span>
-          </div>
-        </div>
 
-        <div class="item">
-          <div class="row">
-            <p class="where">公司 / 组织名称</p>
-            <div class="when">2022 — 2024</div>
-          </div>
-          <div class="role">职位</div>
-          <ul>
-            <li>用 STAR：背景/任务/行动/结果（简短）。</li>
-            <li>突出你的贡献，而不是团队做了什么。</li>
-          </ul>
-        </div>
-      </section>
+          <p>
+            本次原型重点展示了“快速诊断 + 模块化集成”的一体化流程：在入库检测阶段，使用脉冲测试进行 SOH 快速筛查；
+            在系统集成阶段，采用标准化电气接口与可替换模块设计，以提升交付效率并降低现场施工复杂度。
+          </p>
 
-      <!-- 教育 -->
-      <section class="card">
-        <h2>教育背景</h2>
+          <!-- One image in the news (replace src with your own) -->
+          <img class="hero-img" src="assets/news-photo.jpg" alt="新闻配图：BESS 原型示意（替换为你的图片）" />
 
-        <div class="item">
-          <div class="row">
-            <p class="where">学校名称（例如：Université Paris-Saclay）</p>
-            <div class="when">2022 — 2026</div>
+          <p>
+            下一步，团队将联合产业合作伙伴开展试点验证，围绕运维诊断、寿命预测与能量管理策略持续迭代，
+            推动退役电池在储能场景中的规模化应用。
+          </p>
+
+          <div class="btn-row">
+            <a class="btn primary" href="#">阅读更多</a>
+            <a class="btn" href="#">下载新闻稿</a>
+            <a class="btn" href="#">媒体合作</a>
           </div>
-          <div class="role">学位 / 专业（例如：PhD · Battery / Control / ML）</div>
-          <ul>
-            <li>研究方向：……（例如：PMP + RL 健康感知充电策略）</li>
-            <li>关键课程 / 项目：……</li>
-          </ul>
+        </article>
+      </div>
+
+      <!-- Media logos -->
+      <div class="media-strip">
+        <div class="media-title">
+          <h3>媒体报道（Logo 占位区）</h3>
+          <div class="hint">把下面替换成真实媒体 Logo 图片即可</div>
         </div>
 
-        <div class="item">
-          <div class="row">
-            <p class="where">学校名称</p>
-            <div class="when">2018 — 2022</div>
-          </div>
-          <div class="role">学位 / 专业</div>
-          <ul>
-            <li>亮点：GPA / 奖学金 / 交换 / 项目</li>
-          </ul>
+        <div class="logos">
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 1</small></div>
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 2</small></div>
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 3</small></div>
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 4</small></div>
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 5</small></div>
+          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 6</small></div>
         </div>
+      </div>
+    </section>
 
-        <div class="section">
-          <h2>项目（可选）</h2>
-          <div class="item">
-            <div class="row">
-              <p class="where">项目名称（链接可选）</p>
-              <div class="when">2025</div>
-            </div>
-            <div class="role">一句话说明项目价值</div>
-            <ul>
-              <li>技术栈：Python / MATLAB / Simulink / Docker …</li>
-              <li>结果：指标 / demo / 用户反馈</li>
-            </ul>
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="card block">
+        <div class="inner">
+          <h4>搜索</h4>
+          <div class="searchbar">
+            <input type="text" placeholder="请输入关键词" />
+            <button type="button">SEARCH</button>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
 
-    <div class="grid">
-      <!-- 论文/专利 -->
-      <section class="card">
-        <h2>论文 / 专利 / 公开演讲（可选）</h2>
-        <div class="item">
-          <div class="row">
-            <p class="where">论文标题 / 专利标题</p>
-            <div class="when">2025</div>
+      <div class="card block">
+        <div class="inner">
+          <h4>免责声明</h4>
+          <div class="notice">
+            本页面为企业新闻静态展示模板。所有链接仅为占位，不代表真实跳转。
+            如涉及版权或内容问题，请通过 Contact Us 联系我们。
           </div>
-          <div class="role">期刊/会议 · 作者顺序（例如：First author）</div>
-          <ul>
-            <li>一句话说明贡献点（例如：提出 XX 方法，达到 XX 性能）。</li>
-          </ul>
         </div>
-        <div class="item">
-          <div class="row">
-            <p class="where">Talk / Workshop / Demo</p>
-            <div class="when">2024</div>
-          </div>
-          <div class="role">活动名 · 主题</div>
+      </div>
+
+      <div class="latest block">
+        <div class="head">Newest</div>
+        <ul>
+          <li><a href="#">• Sifra Tech 与产业伙伴达成联合试点合作（占位）</a></li>
+          <li><a href="#">• 退役电池快速检测：脉冲法实验室升级（占位）</a></li>
+          <li><a href="#">• 第二生命电池 BESS：标准化模块发布（占位）</a></li>
+          <li><a href="#">• 招募：硬件测试与数据工程实习生（占位）</a></li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Footer cover -->
+  <footer class="footer">
+    <div class="wrap">
+      <section>
+        <h5>Links</h5>
+        <div class="links">
+          <a href="#">Handheld Inkjet Printer</a>
+          <a href="#">Australian Morning Post</a>
+          <a href="#">American Fortune Daily</a>
+          <a href="#">American People Network</a>
+
+          <a href="#">United States Newsletter</a>
+          <a href="#">BBC Network News</a>
+          <a href="#">American News Network</a>
+          <a href="#">Startup Weekly</a>
+
+          <a href="#">New York City Morning Post</a>
+          <a href="#">Bloomberg Digital Journal</a>
+          <a href="#">Yahoo See</a>
+          <a href="#">Industrial Inkjet Printer</a>
         </div>
       </section>
 
-      <!-- 技能 -->
-      <section class="card">
-        <h2>技能</h2>
-        <div class="item">
-          <div class="row">
-            <p class="where">技术</p>
-          </div>
-          <div class="tags">
-            <span class="tag">Python</span>
-            <span class="tag">MATLAB/Simulink</span>
-            <span class="tag">机器学习</span>
-            <span class="tag">数据分析</span>
-            <span class="tag">嵌入式/硬件（可选）</span>
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="row">
-            <p class="where">语言</p>
-          </div>
-          <ul>
-            <li>中文：母语</li>
-            <li>英语：流利</li>
-            <li>法语：工作沟通（按你实际情况改）</li>
-          </ul>
-        </div>
-
-        <div class="item">
-          <div class="row">
-            <p class="where">兴趣（可选）</p>
-          </div>
-          <div class="tags">
-            <span class="tag">摄影</span>
-            <span class="tag">徒步</span>
-            <span class="tag">开源</span>
-          </div>
-        </div>
+      <section class="contact">
+        <h5>Contact Us</h5>
+        <div>© Copyright 2009-2025 Sifra Tech</div>
+        <a href="#" style="color:#fff;">Contact Us</a>
+        <a href="#" style="color:#fff;">SiteMap</a>
+        <div style="color:#94a3b8;">All hyperlinks are placeholders.</div>
       </section>
     </div>
 
-    <div class="footer">
-      © <span id="y"></span> 你的名字 · Built with pure HTML/CSS · Hosted on GitHub Pages
+    <div class="copyright">
+      本页面为静态 HTML 模板，可直接部署至 GitHub Pages（无需后端）。
     </div>
-  </div>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+  </footer>
 </body>
 </html>
