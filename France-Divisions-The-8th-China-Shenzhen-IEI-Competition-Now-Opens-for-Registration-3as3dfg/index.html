@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>企业新闻 | Sifra Tech Newsroom</title>
+  <title>Corporate News | International Innovation Updates</title>
+
   <style>
     :root{
       --bg:#f6f7f9;
@@ -19,13 +20,15 @@
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC","Noto Sans CJK SC","Microsoft YaHei", sans-serif;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
       background:var(--bg);
       line-height:1.65;
     }
-    a{color:inherit; text-decoration:none}
+    a{text-decoration:none;color:inherit}
     a:hover{color:var(--accent)}
+
+    /* Top bar */
     .topbar{
       background:var(--nav);
       color:#fff;
@@ -34,53 +37,35 @@
       align-items:center;
       justify-content:space-between;
       padding:0 18px;
-      position:sticky;
-      top:0;
-      z-index:10;
       border-bottom:1px solid rgba(255,255,255,.08);
     }
-    .topbar .left{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-size:14px;
-      opacity:.95;
-    }
-    .badge-date{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 10px;
-      border:1px solid rgba(255,255,255,.16);
+    .badge{
+      padding:6px 12px;
       border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
       background:rgba(255,255,255,.06);
+      font-size:14px;
     }
     .brand{
       display:flex;
       align-items:center;
       gap:10px;
       font-weight:700;
-      letter-spacing:.2px;
     }
-    .brand .dot{
+    .dot{
       width:10px;height:10px;border-radius:50%;
       background:linear-gradient(135deg,#60a5fa,#22c55e);
-      box-shadow:0 0 0 4px rgba(96,165,250,.15);
     }
-    .topbar .right a{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+    .topbar a{
       padding:8px 12px;
       border-radius:10px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.18);
       font-size:14px;
     }
 
+    /* Navigation */
     .nav{
       background:var(--nav2);
-      color:#e5e7eb;
       border-bottom:1px solid rgba(255,255,255,.08);
     }
     .nav .wrap{
@@ -89,35 +74,30 @@
       padding:10px 16px;
       display:flex;
       gap:14px;
-      align-items:center;
       flex-wrap:wrap;
     }
     .nav a{
       padding:10px 12px;
       border-radius:12px;
+      color:#e5e7eb;
       font-weight:600;
       font-size:14px;
-      color:#e5e7eb;
-      opacity:.92;
     }
-    .nav a:hover{
-      background:rgba(255,255,255,.08);
-      opacity:1;
-    }
-    .nav .active{
+    .nav a.active{
       background:rgba(37,99,235,.25);
       border:1px solid rgba(37,99,235,.35);
     }
 
+    /* Layout */
     .container{
       max-width:1160px;
-      margin:24px auto 40px;
+      margin:24px auto;
       padding:0 16px;
       display:grid;
-      grid-template-columns: 1fr 340px;
+      grid-template-columns:1fr 340px;
       gap:18px;
     }
-    @media (max-width: 980px){
+    @media(max-width:980px){
       .container{grid-template-columns:1fr}
     }
 
@@ -125,91 +105,64 @@
       background:var(--card);
       border:1px solid var(--line);
       border-radius:16px;
-      box-shadow:0 8px 24px rgba(15,23,42,.06);
+      box-shadow:0 8px 24px rgba(0,0,0,.06);
       overflow:hidden;
     }
-    .card .inner{padding:22px}
-    .title{
+    .inner{padding:22px}
+
+    h1{
       font-size:26px;
-      line-height:1.25;
       margin:0 0 10px;
-      letter-spacing:.2px;
+      line-height:1.25;
     }
     .meta{
       display:flex;
-      flex-wrap:wrap;
       gap:14px;
-      color:var(--muted);
+      flex-wrap:wrap;
       font-size:13px;
-      margin-bottom:16px;
-      padding-bottom:14px;
+      color:var(--muted);
       border-bottom:1px solid var(--line);
+      padding-bottom:14px;
+      margin-bottom:14px;
     }
-    .meta span{display:inline-flex;align-items:center;gap:8px}
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
       padding:4px 10px;
       border-radius:999px;
       background:#f1f5f9;
       border:1px solid #e2e8f0;
-      color:#334155;
       font-weight:600;
       font-size:12px;
     }
 
-    .hero-img{
+    .hero{
       width:100%;
       height:380px;
       object-fit:cover;
       border-radius:14px;
       border:1px solid var(--line);
-      margin:14px 0 14px;
-      background:#e2e8f0;
-    }
-    .article p{margin:12px 0}
-    .quote{
       margin:14px 0;
-      padding:14px 16px;
-      background:#eff6ff;
-      border:1px solid #dbeafe;
-      border-left:4px solid var(--accent);
-      border-radius:12px;
-      color:#1e3a8a;
-      font-weight:600;
+      background:#e5e7eb;
     }
 
-    /* Media logos area */
+    .article p{margin:12px 0}
+
+    /* Media logos */
     .media-strip{
-      margin-top:18px;
-      padding:18px;
       border-top:1px solid var(--line);
-      background:linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      padding:18px;
+      background:#fbfdff;
     }
-    .media-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:12px;
-    }
-    .media-title h3{
-      margin:0;
+    .media-strip h3{
+      margin:0 0 12px;
       font-size:16px;
-      letter-spacing:.2px;
-    }
-    .media-title .hint{
-      color:var(--muted);
-      font-size:13px;
     }
     .logos{
       display:grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns:repeat(6,1fr);
       gap:10px;
     }
-    @media (max-width: 980px){
-      .logos{grid-template-columns: repeat(3, 1fr);}
+    @media(max-width:980px){
+      .logos{grid-template-columns:repeat(3,1fr)}
     }
     .logo{
       height:56px;
@@ -220,62 +173,35 @@
       align-items:center;
       justify-content:center;
       font-weight:800;
-      letter-spacing:.8px;
       color:#334155;
-      user-select:none;
-      position:relative;
-      overflow:hidden;
-    }
-    .logo::after{
-      content:"";
-      position:absolute;
-      inset:-40% -40%;
-      background:linear-gradient(120deg, rgba(37,99,235,.12), rgba(34,197,94,.10), rgba(239,68,68,.08));
-      transform:rotate(10deg);
-      filter:blur(8px);
-      opacity:.55;
-    }
-    .logo span{position:relative; z-index:1}
-    .logo small{
-      position:relative; z-index:1;
-      font-weight:700;
-      font-size:12px;
-      color:#475569;
     }
 
     /* Sidebar */
-    .side .block{margin-bottom:14px}
     .side h4{
       margin:0 0 10px;
       font-size:15px;
-      letter-spacing:.2px;
     }
-    .searchbar{
+    .search{
       display:flex;
       gap:8px;
     }
-    .searchbar input{
-      width:100%;
-      padding:12px 12px;
+    .search input{
+      flex:1;
+      padding:12px;
       border-radius:12px;
       border:1px solid var(--line);
-      outline:none;
-      font-size:14px;
-      background:#fff;
     }
-    .searchbar button{
+    .search button{
       padding:12px 14px;
-      border:none;
       border-radius:12px;
+      border:none;
       background:var(--accent2);
       color:#fff;
-      font-weight:800;
-      cursor:pointer;
-      letter-spacing:.3px;
+      font-weight:700;
     }
     .notice{
-      color:var(--muted);
       font-size:13px;
+      color:var(--muted);
       background:#fff7ed;
       border:1px solid #fed7aa;
       border-radius:14px;
@@ -283,274 +209,232 @@
     }
     .latest{
       border-top:3px solid var(--accent);
-      border-radius:14px;
       background:#fff;
       border:1px solid var(--line);
+      border-radius:14px;
       overflow:hidden;
     }
     .latest .head{
-      padding:12px 14px;
+      padding:12px;
+      font-weight:800;
       background:#f8fafc;
-      font-weight:900;
-      letter-spacing:.2px;
       border-bottom:1px solid var(--line);
     }
     .latest ul{
       list-style:none;
       margin:0;
-      padding:8px 14px 12px;
+      padding:12px;
     }
     .latest li{
       padding:10px 0;
       border-bottom:1px dashed #e2e8f0;
-      color:#0f172a;
       font-size:14px;
     }
-    .latest li:last-child{border-bottom:none}
-    .latest a{color:#0f172a}
-    .latest a:hover{color:var(--accent)}
 
     /* Footer */
     .footer{
       background:var(--nav);
       color:#cbd5e1;
-      margin-top:44px;
-      border-top:1px solid rgba(255,255,255,.08);
+      margin-top:40px;
     }
     .footer .wrap{
       max-width:1160px;
-      margin:0 auto;
+      margin:auto;
       padding:28px 16px;
       display:grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns:2fr 1fr;
       gap:18px;
-    }
-    @media (max-width: 980px){
-      .footer .wrap{grid-template-columns:1fr}
     }
     .footer h5{
       margin:0 0 12px;
       color:#fff;
-      font-size:16px;
-      letter-spacing:.3px;
     }
-    .footer .links{
+    .links{
       display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:8px 14px;
-      font-size:13px;
-      opacity:.92;
-    }
-    @media (max-width: 980px){
-      .footer .links{grid-template-columns: repeat(2, 1fr)}
-    }
-    .footer .links a{
-      padding:6px 8px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.04);
-    }
-    .footer .contact{
-      display:flex;
-      flex-direction:column;
+      grid-template-columns:repeat(4,1fr);
       gap:10px;
       font-size:13px;
-      opacity:.92;
+    }
+    .links a{
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
     }
     .copyright{
       border-top:1px solid rgba(255,255,255,.08);
-      padding:14px 16px;
       text-align:center;
+      padding:14px;
       font-size:12px;
       color:#94a3b8;
-    }
-    .btn-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#fff;
-      font-weight:800;
-      font-size:13px;
-      cursor:pointer;
-    }
-    .btn.primary{
-      border-color:rgba(37,99,235,.35);
-      background:rgba(37,99,235,.08);
-      color:#1d4ed8;
     }
   </style>
 </head>
 
 <body>
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="left">
-      <span class="badge-date">🗓️ 2025-12-24</span>
-      <div class="brand">
-        <span class="dot"></span>
-        <span>Sifra Tech · Newsroom</span>
-      </div>
-    </div>
-    <div class="right">
-      <a href="#" aria-label="Contact Us">Contact Us</a>
-    </div>
-  </header>
 
-  <!-- Nav -->
-  <nav class="nav" aria-label="Main navigation">
-    <div class="wrap">
-      <a class="active" href="#">Home</a>
-      <a href="#">Company</a>
-      <a href="#">Business Finance</a>
-      <a href="#">Technology</a>
-      <a href="#">Smart Energy</a>
-      <a href="#">Events</a>
-      <a href="#">More ▾</a>
-    </div>
-  </nav>
+<header class="topbar">
+  <div class="brand">
+    <span class="dot"></span>
+    <span>International Innovation News</span>
+    <span class="badge">2025-12-24</span>
+  </div>
+  <a href="#">Contact Us</a>
+</header>
 
-  <!-- Main -->
-  <main class="container">
-    <!-- Article -->
-    <section class="card">
-      <div class="inner">
-        <h1 class="title">Sifra Energy 发布第二生命电池 BESS 原型：面向欧洲工商业储能的快速部署方案</h1>
+<nav class="nav">
+  <div class="wrap">
+    <a class="active" href="#">Home</a>
+    <a href="#">Business</a>
+    <a href="#">Technology</a>
+    <a href="#">Innovation</a>
+    <a href="#">Events</a>
+    <a href="#">More ▾</a>
+  </div>
+</nav>
 
-        <div class="meta">
-          <span>🕒 2025-12-24</span>
-          <span>✍️ Sifra Tech Press</span>
-          <span class="pill">企业新闻</span>
-          <span class="pill">BESS</span>
-          <span class="pill">Second-life Batteries</span>
-        </div>
+<main class="container">
 
-        <article class="article">
-          <p>
-            近日，Sifra Energy 正式发布基于退役动力电池整包复用的 BESS 原型方案。该方案通过复用原车 BMS 与热管理系统，
-            在保障安全性的同时降低系统集成成本，适用于工商业侧削峰填谷、微电网与应急备电等场景。
-          </p>
+  <!-- Article -->
+  <section class="card">
+    <div class="inner">
+      <h1>The 8th China (Shenzhen) Innovation & Entrepreneurship International Competition Is Now Open</h1>
 
-          <div class="quote">
-            亮点：快速接入 · 安全可控 · 成本友好 · 便于运维（链接均为占位）
-          </div>
-
-          <p>
-            本次原型重点展示了“快速诊断 + 模块化集成”的一体化流程：在入库检测阶段，使用脉冲测试进行 SOH 快速筛查；
-            在系统集成阶段，采用标准化电气接口与可替换模块设计，以提升交付效率并降低现场施工复杂度。
-          </p>
-
-          <!-- One image in the news (replace src with your own) -->
-          <img class="hero-img" src="assets/news-photo.jpg" alt="新闻配图：BESS 原型示意（替换为你的图片）" />
-
-          <p>
-            下一步，团队将联合产业合作伙伴开展试点验证，围绕运维诊断、寿命预测与能量管理策略持续迭代，
-            推动退役电池在储能场景中的规模化应用。
-          </p>
-
-          <div class="btn-row">
-            <a class="btn primary" href="#">阅读更多</a>
-            <a class="btn" href="#">下载新闻稿</a>
-            <a class="btn" href="#">媒体合作</a>
-          </div>
-        </article>
+      <div class="meta">
+        <span>August 2024</span>
+        <span>Official Announcement</span>
+        <span class="pill">International Competition</span>
+        <span class="pill">Innovation</span>
       </div>
 
-      <!-- Media logos -->
-      <div class="media-strip">
-        <div class="media-title">
-          <h3>媒体报道（Logo 占位区）</h3>
-          <div class="hint">把下面替换成真实媒体 Logo 图片即可</div>
-        </div>
+      <article class="article">
+        <p>
+          The 8th China (Shenzhen) Innovation & Entrepreneurship International Competition,
+          renowned as the “Olympics” of the innovation and entrepreneurship community in this heady summer of the Olympics,
+          is officially back in action! Embracing the concept of
+          <strong>“Fostering International Exchange and Cooperation, Sharing Opportunities for Innovation and Development.”</strong>
+        </p>
 
-        <div class="logos">
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 1</small></div>
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 2</small></div>
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 3</small></div>
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 4</small></div>
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 5</small></div>
-          <div class="logo"><span>MEDIA</span>&nbsp;<small>LOGO 6</small></div>
-        </div>
+        <p>
+          We are now inviting outstanding entrepreneurial projects from 13 overseas divisional sites across the globe:
+          Melbourne (Australia), Toronto (Canada), Paris (France), Munich (Germany), Milan (Italy),
+          Tokyo (Japan), Eindhoven (Netherlands), Barcelona (Spain), London (United Kingdom),
+          Silicon Valley (USA), Boston (USA), Stockholm (Sweden), and Zurich (Switzerland).
+        </p>
+
+        <img class="hero" src="assets/news-photo.jpg" alt="Competition promotional image" />
+
+        <p>
+          With a total prize pool of <strong>9.71 million RMB</strong>,
+          individual contestants may win up to <strong>1.75 million RMB</strong>,
+          including competition awards and comprehensive landing support.
+          This substantial reward underscores our commitment to empowering innovative ventures.
+        </p>
+
+        <p>
+          Beyond financial incentives, the competition offers industrial incubation,
+          technology finance, and project acceleration services,
+          ensuring that high-potential startups receive the resources and guidance
+          necessary to scale their businesses.
+        </p>
+
+        <p>
+          There are seven categories available:
+          New Generation Computing, Digitalization and Fashion,
+          High-End Equipment Manufacturing, Green Tech and Sustainable Development,
+          New Materials, Bio-Medical and Health, and Marine.
+        </p>
+
+        <p>
+          The online application deadline is <strong>10 September</strong>.
+          The France division final will be held face-to-face in Paris.
+          Winners will advance to the global finals in Shenzhen, China,
+          with all travel costs fully covered — a free trip to China.
+        </p>
+
+        <p>
+          Apply now via our website:
+          <a href="https://lnkd.in/eSCQQdsA" target="_blank">https://lnkd.in/eSCQQdsA</a>
+        </p>
+
+        <p>
+          For inquiries, please contact us via LinkedIn or email:
+          <strong>assoctisfr@gmail.com</strong>
+        </p>
+      </article>
+    </div>
+
+    <div class="media-strip">
+      <h3>Media Coverage</h3>
+      <div class="logos">
+        <div class="logo">MEDIA LOGO</div>
+        <div class="logo">MEDIA LOGO</div>
+        <div class="logo">MEDIA LOGO</div>
+        <div class="logo">MEDIA LOGO</div>
+        <div class="logo">MEDIA LOGO</div>
+        <div class="logo">MEDIA LOGO</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="card inner">
+      <h4>Search</h4>
+      <div class="search">
+        <input placeholder="Enter keywords" />
+        <button>SEARCH</button>
+      </div>
+    </div>
+
+    <div class="card inner">
+      <h4>Disclaimer</h4>
+      <div class="notice">
+        This page is a static corporate news display.
+        All hyperlinks are for demonstration purposes only.
+      </div>
+    </div>
+
+    <div class="latest">
+      <div class="head">Latest News</div>
+      <ul>
+        <li><a href="#">Global Startup Ecosystems Show Strong Post-Pandemic Recovery</a></li>
+        <li><a href="#">International Innovation Forums Drive Cross-Border Collaboration</a></li>
+        <li><a href="#">European Tech Hubs Attract Record Venture Capital in 2024</a></li>
+        <li><a href="#">Universities Play Growing Role in Deep-Tech Commercialization</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <section>
+      <h5>Links</h5>
+      <div class="links">
+        <a href="#">Australian Morning Post</a>
+        <a href="#">American Fortune Daily</a>
+        <a href="#">BBC Network News</a>
+        <a href="#">Startup Weekly</a>
+        <a href="#">Bloomberg Digital Journal</a>
+        <a href="#">Yahoo News</a>
+        <a href="#">Global Tech Review</a>
+        <a href="#">Innovation Digest</a>
       </div>
     </section>
 
-    <!-- Sidebar -->
-    <aside class="side">
-      <div class="card block">
-        <div class="inner">
-          <h4>搜索</h4>
-          <div class="searchbar">
-            <input type="text" placeholder="请输入关键词" />
-            <button type="button">SEARCH</button>
-          </div>
-        </div>
-      </div>
+    <section>
+      <h5>Contact Us</h5>
+      <p>Email: info@example.com</p>
+      <p>LinkedIn | Sitemap</p>
+    </section>
+  </div>
 
-      <div class="card block">
-        <div class="inner">
-          <h4>免责声明</h4>
-          <div class="notice">
-            本页面为企业新闻静态展示模板。所有链接仅为占位，不代表真实跳转。
-            如涉及版权或内容问题，请通过 Contact Us 联系我们。
-          </div>
-        </div>
-      </div>
+  <div class="copyright">
+    © 2009–2025 Corporate News Platform. All rights reserved.
+  </div>
+</footer>
 
-      <div class="latest block">
-        <div class="head">Newest</div>
-        <ul>
-          <li><a href="#">• Sifra Tech 与产业伙伴达成联合试点合作（占位）</a></li>
-          <li><a href="#">• 退役电池快速检测：脉冲法实验室升级（占位）</a></li>
-          <li><a href="#">• 第二生命电池 BESS：标准化模块发布（占位）</a></li>
-          <li><a href="#">• 招募：硬件测试与数据工程实习生（占位）</a></li>
-        </ul>
-      </div>
-    </aside>
-  </main>
-
-  <!-- Footer cover -->
-  <footer class="footer">
-    <div class="wrap">
-      <section>
-        <h5>Links</h5>
-        <div class="links">
-          <a href="#">Handheld Inkjet Printer</a>
-          <a href="#">Australian Morning Post</a>
-          <a href="#">American Fortune Daily</a>
-          <a href="#">American People Network</a>
-
-          <a href="#">United States Newsletter</a>
-          <a href="#">BBC Network News</a>
-          <a href="#">American News Network</a>
-          <a href="#">Startup Weekly</a>
-
-          <a href="#">New York City Morning Post</a>
-          <a href="#">Bloomberg Digital Journal</a>
-          <a href="#">Yahoo See</a>
-          <a href="#">Industrial Inkjet Printer</a>
-        </div>
-      </section>
-
-      <section class="contact">
-        <h5>Contact Us</h5>
-        <div>© Copyright 2009-2025 Sifra Tech</div>
-        <a href="#" style="color:#fff;">Contact Us</a>
-        <a href="#" style="color:#fff;">SiteMap</a>
-        <div style="color:#94a3b8;">All hyperlinks are placeholders.</div>
-      </section>
-    </div>
-
-    <div class="copyright">
-      本页面为静态 HTML 模板，可直接部署至 GitHub Pages（无需后端）。
-    </div>
-  </footer>
 </body>
 </html>
